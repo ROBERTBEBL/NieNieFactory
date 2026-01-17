@@ -1,0 +1,29 @@
+# IDE相关文件 (IntelliJ/Eclipse)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+build/
+classes/
+
+# Gradle构建工具相关
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Minecraft模组编译产物
+run/
+logs/
+generated/
+*.class
+
+# 系统缓存文件
+.DS_Store
+Thumbs.db
+*.bak
+
+# 配置文件（可选，如果你有私密配置）
+*.properties
+config/
