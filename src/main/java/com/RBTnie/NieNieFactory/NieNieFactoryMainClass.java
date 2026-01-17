@@ -48,7 +48,11 @@ public class NieNieFactoryMainClass {
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public NieNieFactoryMainClass(IEventBus modEventBus, ModContainer modContainer) {
 
-        NieNieSuperContent.registerAll(modEventBus);
+        // 初始化父类的注册器
+        NieNieSuperContent.initAll(modEventBus);
+
+        // 实例化所有子类
+        initAllContentSubclasses();
 
 //        modEventBus.addListener(this::addCreative);
 
@@ -61,7 +65,14 @@ public class NieNieFactoryMainClass {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
     }
-
+    // ========== 核心方法：自动实例化所有子类 (新增子类后，这里加一行即可，极简) ==========
+    private void initAllContentSubclasses() {
+        // 规则：新增一个子类，就在这里 new 一次，仅此一行，永不改其他地方
+        // 示例：new 你的子类名();
+        new NieNieFactoryPrototype();
+        // 以后加新内容，比如 new NieNieGoldGenerator(); 即可，其他全部不用动
+        NieNieSuperContent.nienieContentLogic("✅ 所有子类自动实例化完成！物品将自动注册+进创造栏");
+    }
     private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
