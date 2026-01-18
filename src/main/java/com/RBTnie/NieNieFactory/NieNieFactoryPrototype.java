@@ -6,6 +6,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -36,12 +37,17 @@ public class NieNieFactoryPrototype extends NieNieSuperContent {
                     .build()
     );
 
-    // ✅ ✅ ✅ 一行代码 物品自动加入创造栏 ✅ ✅ ✅
-    @Override
-    protected void fillCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
-        if (isTab(event, NIENIE_FACTORY_TAB.get())) {
-            event.accept(NIENIE_FACTORY_PROTOTYPE_ITEM);
-            nienieContentLogic("✅ 原型方块 已成功加入专属创造栏！");
-        }
+    // ✅ 你的核心设计：子类构造传总线，直接注册事件+写填充逻辑，无重写、无抽象方法！
+    public NieNieFactoryPrototype() {
+        // 直接注册创造栏事件，Lambda里写填充逻辑，一步到位
+        modEventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
+            if(event.getTab() == NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_PROTOTYPE_ITEM);
+        });
+
+
+
+
+
+        System.out.println("✅ 子类1 初始化完成：方块注册+创造栏事件绑定成功");
     }
 }
