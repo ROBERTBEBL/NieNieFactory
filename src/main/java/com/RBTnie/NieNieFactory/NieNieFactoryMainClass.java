@@ -1,5 +1,9 @@
 package com.RBTnie.NieNieFactory;
 
+import com.RBTnie.NieNieFactory.NieNieContents.NieNieDimension;
+import com.RBTnie.NieNieFactory.NieNieContents.NieNieFactory;
+import com.RBTnie.NieNieFactory.NieNieContents.NieNieFactoryPrototype;
+import com.RBTnie.NieNieFactory.NieNieContents.NieNiePotion;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -50,7 +54,9 @@ public class NieNieFactoryMainClass {
 
         NieNieSuperContent.registerAll(modEventBus);
         new NieNieFactoryPrototype();
-
+        new NieNieFactory();
+        new NieNiePotion();
+        new NieNieDimension();
 //        modEventBus.addListener(this::addCreative);
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (Nieniefactory) to respond directly to events.

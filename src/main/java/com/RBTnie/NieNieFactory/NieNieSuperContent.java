@@ -1,7 +1,13 @@
 package com.RBTnie.NieNieFactory;
 
+import net.minecraft.core.Position;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -16,15 +22,23 @@ public class NieNieSuperContent {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(NieNieFactoryMainClass.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(NieNieFactoryMainClass.MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, NieNieFactoryMainClass.MODID);
+    // 新增：药水效果注册器
+    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, NieNieFactoryMainClass.MODID);
+    // 新增：维度类型注册器
+    public static final DeferredRegister<DimensionType> DIMENSION_TYPES = DeferredRegister.create(Registries.DIMENSION_TYPE, NieNieFactoryMainClass.MODID);
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(Registries.POTION, NieNieFactoryMainClass.MODID);
 
     // ✅ 供子类使用的事件总线成员变量
     public static IEventBus modEventBus;
 
     public static void registerAll(IEventBus modEventBus) {
         NieNieSuperContent.modEventBus = modEventBus;
+        CREATIVE_MODE_TABS.register(modEventBus);
+        DIMENSION_TYPES.register(modEventBus);
+        MOB_EFFECTS.register(modEventBus);
+        POTIONS.register(modEventBus);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
-        CREATIVE_MODE_TABS.register(modEventBus);
         System.out.println("✅ 父类静态注册器绑定总线完成！已经保存模组事件总线");
     }
 
