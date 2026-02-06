@@ -43,6 +43,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.OptionalLong;
@@ -60,6 +61,7 @@ public class NieNieDimension extends NieNieSuperContent {
 
     // 1. 维度核心资源键（适配命名规范）
     public static final ResourceLocation NIENIE_DIMENSION_RL = ResourceLocation.fromNamespaceAndPath(NieNieFactoryMainClass.MODID, "nienie_dimension");
+    public static final ResourceKey<Level> NIENIE_DIMENSION_KEY = ResourceKey.create(Registries.DIMENSION, NIENIE_DIMENSION_RL);
     public static final ResourceKey<LevelStem> NIENIE_DIMENSION_STEM_KEY = ResourceKey.create(Registries.LEVEL_STEM, NIENIE_DIMENSION_RL);
     public static final ResourceKey<DimensionType> NIENIE_DIMENSION_TYPE_KEY = ResourceKey.create(Registries.DIMENSION_TYPE, NIENIE_DIMENSION_RL.withSuffix("_type"));
     public static final ResourceKey<NoiseGeneratorSettings> NIENIE_DIMENSION_NOISEGENSETTINGS_KEY = ResourceKey.create(Registries.NOISE_SETTINGS, NIENIE_DIMENSION_RL);
@@ -94,7 +96,6 @@ public class NieNieDimension extends NieNieSuperContent {
             );
         }
     }
-
     // 3. 空NoiseRouter（无任何地形生成）
     private static NoiseRouter Router() {
         // 所有密度函数设为常量0，彻底禁用地形生成
@@ -156,6 +157,7 @@ public class NieNieDimension extends NieNieSuperContent {
                     )
             );
         }
+
     }
 
     public static class BiomeRegistry {

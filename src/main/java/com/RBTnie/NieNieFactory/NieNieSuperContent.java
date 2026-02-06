@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -27,7 +28,7 @@ public class NieNieSuperContent {
     // 新增：维度类型注册器
     public static final DeferredRegister<DimensionType> DIMENSION_TYPES = DeferredRegister.create(Registries.DIMENSION_TYPE, NieNieFactoryMainClass.MODID);
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(Registries.POTION, NieNieFactoryMainClass.MODID);
-
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, NieNieFactoryMainClass.MODID);
     // ✅ 供子类使用的事件总线成员变量
     public static IEventBus modEventBus;
 
@@ -39,6 +40,7 @@ public class NieNieSuperContent {
         POTIONS.register(modEventBus);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        BLOCK_ENTITIES.register(modEventBus);
         System.out.println("✅ 父类静态注册器绑定总线完成！已经保存模组事件总线");
     }
 
