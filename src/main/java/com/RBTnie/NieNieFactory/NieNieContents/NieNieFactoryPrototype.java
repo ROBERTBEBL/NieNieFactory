@@ -1,4 +1,5 @@
 package com.RBTnie.NieNieFactory.NieNieContents;
+import com.RBTnie.NieNieFactory.NieNieFactoryMainClass;
 import com.RBTnie.NieNieFactory.NieNieSuperContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -20,7 +21,9 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -36,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.RBTnie.NieNieFactory.NieNieContents.NieNieDimension.*;
 import static com.RBTnie.NieNieFactory.NieNieContents.NieNiePotion.NIENIE_EFFECT;
-
+@EventBusSubscriber(modid = NieNieFactoryMainClass.MODID)
 public class NieNieFactoryPrototype extends NieNieSuperContent {
 
     public static final ConcurrentHashMap<UUID, NieNiePlayerInfo> PLAYER_INFO_CACHE = new ConcurrentHashMap<>();
@@ -155,24 +158,43 @@ public class NieNieFactoryPrototype extends NieNieSuperContent {
     }
 
 
+    @SubscribeEvent
+    public static void AddItemCreativeModeTab(BuildCreativeModeTabContentsEvent event)
+    {
+        if(event.getTab() == NieNieFactoryPrototype.NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_PROTOTYPE_ITEM);
+    }
+
+    @SubscribeEvent
+    public static void AddItemRecipe(GatherDataEvent event)
+    {
+        ExistingFileHelper efh = event.getExistingFileHelper();
+        var lp = event.getLookupProvider();
+        // recipe
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                (DataProvider.Factory<ModRecipeProvider>) pOutput -> new ModRecipeProvider(pOutput, lp)
+        );
+    }
+
+
     // ✅ 你的核心设计：子类构造传总线，直接注册事件+写填充逻辑，无重写、无抽象方法！
     public NieNieFactoryPrototype() {
 
-        // 注册创造栏加入构造创造栏事件
-        modEventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
-            if(event.getTab() == NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_PROTOTYPE_ITEM);
-        });
+//        // 注册创造栏加入构造创造栏事件
+//        modEventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
+//            if(event.getTab() == NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_PROTOTYPE_ITEM);
+//        });
 
         //把配方数据生成加入数据收集事件
-        modEventBus.addListener((GatherDataEvent event) -> {
-            ExistingFileHelper efh = event.getExistingFileHelper();
-            var lp = event.getLookupProvider();
-            // recipe
-            event.getGenerator().addProvider(
-                    event.includeServer(),
-                    (DataProvider.Factory<ModRecipeProvider>) pOutput -> new ModRecipeProvider(pOutput, lp)
-            );
-        });
+//        modEventBus.addListener((GatherDataEvent event) -> {
+//            ExistingFileHelper efh = event.getExistingFileHelper();
+//            var lp = event.getLookupProvider();
+//            // recipe
+//            event.getGenerator().addProvider(
+//                    event.includeServer(),
+//                    (DataProvider.Factory<ModRecipeProvider>) pOutput -> new ModRecipeProvider(pOutput, lp)
+//            );
+//        });
 
     }
 }

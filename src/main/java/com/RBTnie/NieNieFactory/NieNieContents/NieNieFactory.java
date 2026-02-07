@@ -1,5 +1,6 @@
 package com.RBTnie.NieNieFactory.NieNieContents;
 
+import com.RBTnie.NieNieFactory.NieNieFactoryMainClass;
 import com.RBTnie.NieNieFactory.NieNieSuperContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -11,6 +12,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -18,6 +22,9 @@ import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.function.Supplier;
 
+
+
+@EventBusSubscriber(modid = NieNieFactoryMainClass.MODID)
 public class NieNieFactory extends NieNieSuperContent {
     // 1. 注册方块 - 直接复用父类注册器
     public static final DeferredBlock<Block> NIENIE_FACTORY_BLOCK = BLOCKS.registerSimpleBlock(
@@ -49,12 +56,19 @@ public class NieNieFactory extends NieNieSuperContent {
                     BlockEntityType.Builder.of(NieNieFactoryBlockEntity::new,
                             NIENIE_FACTORY_BLOCK.get()).build(null));
 
+
+    @SubscribeEvent
+    public static void AddItemCreativeModeTab(BuildCreativeModeTabContentsEvent event)
+    {
+        if(event.getTab() == NieNieFactoryPrototype.NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_ITEM);
+    }
+
     // ✅ 你的核心设计：子类构造传总线，直接注册事件+写填充逻辑，无重写、无抽象方法！
     public NieNieFactory() {
         // 直接注册创造栏事件
-        modEventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
-            if(event.getTab() == NieNieFactoryPrototype.NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_ITEM);
-        });
+//        modEventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
+//            if(event.getTab() == NieNieFactoryPrototype.NIENIE_FACTORY_TAB.get()) event.accept(NIENIE_FACTORY_ITEM);
+//        });
 
     }
 }

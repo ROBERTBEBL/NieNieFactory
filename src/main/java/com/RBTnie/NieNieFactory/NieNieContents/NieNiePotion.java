@@ -17,6 +17,9 @@ import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -27,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-
+@EventBusSubscriber(modid = NieNieFactoryMainClass.MODID)
 public class NieNiePotion extends NieNieSuperContent {
 
 
@@ -47,10 +50,11 @@ public class NieNiePotion extends NieNieSuperContent {
     // ✅ 你的核心设计：子类构造传总线，直接注册事件+写填充逻辑，无重写、无抽象方法！
     public NieNiePotion() {
 
-        modEventBus.addListener(this::gatherData);
+//        modEventBus.addListener(this::gatherData);
     }
     // 数据生成核心方法：自动生成语言文件
-    private void gatherData(GatherDataEvent event) {
+    @SubscribeEvent
+    private static void gatherData(GatherDataEvent event) {
         // 获取数据生成器
         var generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();

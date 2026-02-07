@@ -34,7 +34,10 @@ import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
@@ -51,12 +54,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
-// 移除@EventBusSubscriber，改用手动注册监听器
+@EventBusSubscriber(modid = NieNieFactoryMainClass.MODID)
 public class NieNieDimension extends NieNieSuperContent {
 
     // 静态初始化：注册事件监听器（替代@SubscribeEvent）
     public NieNieDimension (){
-        modEventBus.addListener(NieNieDimension.ModBusConsumer::gatherData);
+
+//        modEventBus.addListener(NieNieDimension.ModBusConsumer::gatherData);
     }
 
     // 1. 维度核心资源键（适配命名规范）
@@ -202,24 +206,23 @@ public class NieNieDimension extends NieNieSuperContent {
     }
 
 
-    // 8. 数据生成（改用addListener注册）
-    public static class ModBusConsumer {
-        private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-                .add(Registries.NOISE_SETTINGS, NoiseGenSettingRegistry::bootstrap)
-                .add(Registries.DIMENSION_TYPE, DimensionTypeRegistry::bootstrap)
-                .add(Registries.LEVEL_STEM, LevelStemRegistry::bootstrap)
-                .add(Registries.BIOME, BiomeRegistry::bootstrap);
 
-        // 事件处理方法（替代@SubscribeEvent）
-        public static void gatherData(GatherDataEvent event) {
-            DataGenerator generator = event.getGenerator();
-            PackOutput output = generator.getPackOutput();
-            ExistingFileHelper fileHelper = event.getExistingFileHelper();
-            CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
+    private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
+            .add(Registries.NOISE_SETTINGS, NoiseGenSettingRegistry::bootstrap)
+            .add(Registries.DIMENSION_TYPE, DimensionTypeRegistry::bootstrap)
+            .add(Registries.LEVEL_STEM, LevelStemRegistry::bootstrap)
+            .add(Registries.BIOME, BiomeRegistry::bootstrap);
 
-            // 添加数据生成器
-            generator.addProvider(event.includeServer(),
-                    new DatapackBuiltinEntriesProvider(output, lookup, BUILDER, Collections.singleton(NieNieFactoryMainClass.MODID)));
-        }
+    @SubscribeEvent
+    public static void gatherData(GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput output = generator.getPackOutput();
+        ExistingFileHelper fileHelper = event.getExistingFileHelper();
+        CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
+
+        // 添加数据生成器
+        generator.addProvider(event.includeServer(),
+                new DatapackBuiltinEntriesProvider(output, lookup, BUILDER, Collections.singleton(NieNieFactoryMainClass.MODID)));
     }
+
 }
